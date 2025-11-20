@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainbook - The World's First Growth Network</title>
+    <!-- Chosen Palette: Slate Gray and Cobalt Blue -->
+    <!-- Application Structure Plan: A single-page, vertically scrolling dashboard with a fixed sidebar navigation. This structure allows investors to explore the pitch non-linearly, giving them control over the information flow. It's more engaging than a static presentation and allows for interactive data exploration. The flow is designed to build a narrative: identify a major problem, present our elegant solution, prove its market viability, detail the business plan, and close with the long-term vision. This structure is optimal for conveying a complex business case in a clear, digestible, and impressive manner. -->
+    <!-- Visualization & Content Choices: 
+        - The Ask/Use of Funds -> Goal: Compare -> Viz: Donut Chart -> Interaction: Hover for details -> Justification: Instantly communicates the strategic allocation of capital, which is a key investor concern. It's clear, quantitative, and professional. -> Library: Chart.js (Canvas).
+        - Revenue Model -> Goal: Organize -> Viz: Interactive Cards -> Interaction: Hover to highlight and expand -> Justification: Transforms a simple list into an engaging component, allowing investors to quickly grasp the multi-faceted revenue strategy. -> Library/Method: HTML/CSS/JS.
+        - Why Now? -> Goal: Inform -> Viz: Clickable Thematic Cards -> Interaction: Click to reveal text -> Justification: Breaks down complex market trends into digestible pieces, encouraging user interaction and improving information retention. -> Library/Method: HTML/CSS/JS.
+        - Timeline -> Goal: Change -> Viz: Vertical Timeline Diagram -> Interaction: Scroll-based highlighting -> Justification: Clearly visualizes the 18-month roadmap and how the investment translates into tangible milestones. -> Library/Method: HTML/CSS/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+        .nav-link.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+    <div class="flex">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 h-screen sticky top-0 bg-white border-r border-slate-200 p-6 hidden lg:flex flex-col">
+            <h1 class="text-2xl font-bold text-blue-600 mb-10">Brainbook</h1>
+            <nav id="desktop-nav" class="flex flex-col space-y-2">
+                <a href="#vision" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Vision</a>
+                <a href="#problem" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Problem</a>
+                <a href="#solution" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Solution</a>
+                <a href="#timing" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">Why Now?</a>
+                <a href="#business" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Business</a>
+                <a href="#ask" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Ask</a>
+                <a href="#roadmap" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">Roadmap</a>
+                <a href="#team" class="nav-link px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100">The Team</a>
+            </nav>
+            <div class="mt-auto">
+                 <p class="text-xs text-slate-400">Presented by Softech</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 md:p-12">
+            <!-- Section 1: Vision -->
+            <section id="vision" class="min-h-screen flex flex-col justify-center text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900">The Future of Social is Not About Attention.</h2>
+                    <h2 class="text-5xl md:text-7xl font-extrabold tracking-tight text-blue-600 mt-2">It's About Potential.</h2>
+                    <p class="mt-8 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+                        We are building the global operating system for human potential. A platform engineered not to consume your focus, but to <span class="font-bold">compound</span> it.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 2: Problem -->
+            <section id="problem" class="py-20">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Core Problem</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Wasted Potential</h2>
+                    <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                        Modern social platforms are attention-harvesting engines, architected to keep us in a state of passive, endless scrolling. Their business model is fundamentally at odds with our personal growth, creating a systemic erosion of our ability to focus.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 3: Solution -->
+            <section id="solution" class="py-20 bg-white rounded-2xl">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Solution</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">A Growth Network</h2>
+                    <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                         Brainbook makes learning a social activity and personal development a shared journey. We replace the manipulative algorithm with an **Unfiltered Human Feed**, fostering authentic connection and turning passive scrolling into active discovery.
+                    </p>
+                    <div class="mt-12 p-4 border bg-slate-50 rounded-lg max-w-2xl mx-auto">
+                        <div class="bg-white p-4 rounded-lg shadow-inner">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full"></div>
+                                <div class="flex-1">
+                                    <div class="h-4 bg-slate-200 rounded w-1/4"></div>
+                                    <div class="h-3 bg-slate-100 rounded w-1/3 mt-1"></div>
+                                </div>
+                            </div>
+                            <div class="h-5 bg-slate-200 rounded w-full mb-2"></div>
+                            <div class="h-5 bg-slate-200 rounded w-3/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 4: Why Now? -->
+            <section id="timing" class="py-20">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">Why Now?</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">A Market in Transition</h2>
+                     <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                        A perfect storm has created a clear market vacuum for a platform built on growth, not distraction. Click each card to learn more about the converging tides creating this opportunity.
+                    </p>
+                    <div id="timing-cards" class="mt-12 grid md:grid-cols-3 gap-8 text-left">
+                        <div class="timing-card p-6 bg-white rounded-xl shadow-lg cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1">
+                            <h4 class="font-bold text-lg text-slate-900">Post-Attention Economy</h4>
+                            <p class="timing-card-content mt-2 text-slate-600 hidden">A global backlash against algorithmic manipulation and a demand for digital wellness is accelerating. Users are actively seeking healthier online experiences.</p>
+                        </div>
+                        <div class="timing-card p-6 bg-white rounded-xl shadow-lg cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1">
+                            <h4 class="font-bold text-lg text-slate-900">Creator Economy Maturation</h4>
+                            <p class="timing-card-content mt-2 text-slate-600 hidden">Creators need sovereign platforms for direct monetization and community building, moving away from platform-dependent models.</p>
+                        </div>
+                        <div class="timing-card p-6 bg-white rounded-xl shadow-lg cursor-pointer transition-all hover:shadow-xl hover:-translate-y-1">
+                            <h4 class="font-bold text-lg text-slate-900">Demand for Digital Sovereignty</h4>
+                            <p class="timing-card-content mt-2 text-slate-600 hidden">Users want control over their feeds, their data, and their growth. The era of blindly trusting platforms to dictate their online experience is ending.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: The Business -->
+            <section id="business" class="py-20 bg-white rounded-2xl">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Business Model</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">The Connection Economy</h2>
+                    <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                         Our revenue is aligned with the value we create for users. We make money by empowering creators and fostering community, not by selling attention. Hover over each stream to see the details.
+                    </p>
+                    <div id="revenue-streams" class="mt-12 grid md:grid-cols-2 gap-6 text-left">
+                        <div class="revenue-card p-6 bg-slate-50 rounded-xl border border-transparent hover:border-blue-500 hover:bg-white transition-all">
+                            <h4 class="font-bold text-lg text-slate-900">Creator Subscriptions (Primary)</h4>
+                            <p class="mt-2 text-slate-600">Creators launch "Channels" for exclusive content; we take a small, transparent percentage of every subscription fee.</p>
+                        </div>
+                        <div class="revenue-card p-6 bg-slate-50 rounded-xl border border-transparent hover:border-blue-500 hover:bg-white transition-all">
+                            <h4 class="font-bold text-lg text-slate-900">Brainbook Pro</h4>
+                            <p class="mt-2 text-slate-600">A premium user subscription for an enhanced, ad-free experience with advanced profile features and analytics.</p>
+                        </div>
+                        <div class="revenue-card p-6 bg-slate-50 rounded-xl border border-transparent hover:border-blue-500 hover:bg-white transition-all">
+                            <h4 class="font-bold text-lg text-slate-900">Marketplace Fees</h4>
+                            <p class="mt-2 text-slate-600">A peer-to-peer marketplace where Brainbook takes a small, competitive transaction fee on each successful sale.</p>
+                        </div>
+                         <div class="revenue-card p-6 bg-slate-50 rounded-xl border border-transparent hover:border-blue-500 hover:bg-white transition-all">
+                            <h4 class="font-bold text-lg text-slate-900">Promoted Discovery</h4>
+                            <p class="mt-2 text-slate-600">An ethical, non-intrusive alternative to ads. Businesses pay to be featured in a dedicated "Discover" section.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 6: The Ask -->
+            <section id="ask" class="py-20">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Ask</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Foundational Seed Round</h2>
+                     <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                        This is strategic fuel to execute a precise 18-month plan. Every rupee is a calculated investment to build a superior product, ignite a powerful community, and lay the foundation for exponential growth.
+                    </p>
+                </div>
+                 <div class="mt-12 grid md:grid-cols-2 gap-8 items-center max-w-5xl mx-auto">
+                    <div class="text-center md:text-left">
+                         <h3 class="text-2xl font-bold text-slate-700">Raising:</h3>
+                         <p class="text-6xl font-extrabold text-blue-600 mt-2">₹1.5 Crores</p>
+                         <p class="text-2xl font-bold text-slate-500">($180,000 USD)</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="fundsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Section 7: Roadmap -->
+            <section id="roadmap" class="py-20 bg-white rounded-2xl">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center">
+                         <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Roadmap</h3>
+                        <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">18-Month Execution Plan</h2>
+                        <p class="mt-6 text-lg text-slate-600 max-w-3xl mx-auto">
+                            This investment will propel Brainbook from a validated MVP to a market-ready platform with a defensible user base and proven revenue model.
+                        </p>
+                    </div>
+                    <div class="mt-12 relative">
+                        <div class="border-l-2 border-blue-200 absolute h-full top-0 left-4"></div>
+                        <div class="space-y-12">
+                            <div class="pl-12 relative">
+                                <div class="absolute w-4 h-4 bg-blue-600 rounded-full mt-1.5 -left-2 border-4 border-white"></div>
+                                <h4 class="font-bold text-lg text-slate-900">Months 1-6: Product Acceleration</h4>
+                                <p class="mt-1 text-slate-600">Expand core engineering team. Launch real-time comments, friend/follower system, and image/video uploads.</p>
+                            </div>
+                             <div class="pl-12 relative">
+                                <div class="absolute w-4 h-4 bg-blue-600 rounded-full mt-1.5 -left-2 border-4 border-white"></div>
+                                <h4 class="font-bold text-lg text-slate-900">Months 7-12: Community Ignition</h4>
+                                <p class="mt-1 text-slate-600">Execute targeted growth campaigns to acquire first 100,000 active users. Launch creator onboarding program.</p>
+                            </div>
+                             <div class="pl-12 relative">
+                                <div class="absolute w-4 h-4 bg-blue-600 rounded-full mt-1.5 -left-2 border-4 border-white"></div>
+                                <h4 class="font-bold text-lg text-slate-900">Months 13-18: Monetization & Fit</h4>
+                                <p class="mt-1 text-slate-600">Onboard first wave of creators to the "Channels" subscription model, proving the revenue strategy and achieving Product-Market Fit.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Section 8: Team -->
+            <section id="team" class="py-20">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h3 class="text-base font-semibold text-blue-600 tracking-wider uppercase">The Team</h3>
+                    <h2 class="mt-2 text-4xl md:text-5xl font-extrabold tracking-tight text-slate-900">Founder-Led with a Singular Vision</h2>
+                    <div class="mt-12 inline-flex flex-col items-center">
+                         <div class="w-32 h-32 rounded-full bg-slate-200 flex items-center justify-center">
+                             <span class="text-5xl text-slate-500">?</span>
+                         </div>
+                         <h4 class="mt-4 text-xl font-bold">Your Name</h4>
+                         <p class="text-slate-600">Founder & CEO, Softech</p>
+                         <p class="mt-4 text-slate-700 italic max-w-lg">
+                            "As a lifelong builder, I became obsessed with solving the problem of digital distraction. I founded Softech to architect a future where technology serves our potential, not the other way around."
+                         </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- Chart.js Donut Chart for Use of Funds ---
+        const fundsCtx = document.getElementById('fundsChart').getContext('2d');
+        const fundsChart = new Chart(fundsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Product & Engineering', 'Growth & Community', 'Infrastructure & Ops'],
+                datasets: [{
+                    label: 'Use of Funds',
+                    data: [60, 25, 15],
+                    backgroundColor: [
+                        '#3b82f6', // blue-500
+                        '#60a5fa', // blue-400
+                        '#93c5fd'  // blue-300
+                    ],
+                    borderColor: '#f8fafc',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 14
+                            },
+                            color: '#475569' // slate-600
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // --- Interactive Cards for "Why Now?" Section ---
+        const timingCards = document.querySelectorAll('.timing-card');
+        timingCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const content = card.querySelector('.timing-card-content');
+                content.classList.toggle('hidden');
+                card.classList.toggle('bg-blue-50');
+            });
+        });
+
+        // --- Navigation Active State on Scroll ---
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+    });
+</script>
+</body>
+</html>

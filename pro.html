@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainbook: The Growth Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Warm Neutral Harmony" - A calming, professional palette using beige, slate, and a subtle blue accent. -->
+    <!-- Application Structure Plan: A top-down narrative dashboard. The user starts with the high-level vision and can scroll or click through thematic sections: The Vision -> The Problem -> The Solution (interactive diagram) -> The Investment (interactive chart) -> The Roadmap (milestone tracker). This structure is more engaging than a linear document, allowing investors to grasp the big picture first and then dive into details. The interactive elements are designed to make the data feel tangible and the plan feel concrete. -->
+    <!-- Visualization & Content Choices: 
+        1. Vision/Problem/Summary: Presented in clean, high-contrast text sections for maximum readability and impact. Goal: Inform. Method: Styled HTML.
+        2. The Solution Diagram: Report Info -> Canvas & Channels model. Goal: Organize & Explain. Method: An interactive diagram built with HTML/CSS/JS. Interaction: Hovering over "Canvas" or "Channel" reveals more detailed tooltips. Justification: Visually explains the core business model more effectively than text alone.
+        3. Investment Allocation: Report Info -> Funding allocation percentages. Goal: Inform & Compare Proportions. Method: A dynamic Donut Chart via Chart.js. Interaction: Hovering over segments shows exact amounts and percentages. Justification: Instantly communicates the strategic priorities (heavy on product) in a visually compelling way.
+        4. 18-Month Roadmap: Report Info -> User growth, feature launch, and monetization milestones. Goal: Show Change over Time. Method: An interactive milestone tracker built with HTML/CSS/JS. Interaction: Clicking on a phase (e.g., "Month 6") highlights the specific goals for that period. Justification: Breaks down the 18-month plan into digestible, achievable phases, building investor confidence.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm beige background */
+            color: #1a202c;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            color: #3B82F6; /* Accent blue */
+            border-bottom: 2px solid #3B82F6;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .milestone-item {
+            position: relative;
+            padding-bottom: 2.5rem;
+            padding-left: 2.5rem;
+            border-left: 2px solid #E5E7EB;
+        }
+        .milestone-item:last-child {
+            border-left: 2px solid transparent;
+        }
+        .milestone-dot {
+            position: absolute;
+            left: -10px;
+            top: 4px;
+            height: 20px;
+            width: 20px;
+            border-radius: 9999px;
+            background-color: #FFFFFF;
+            border: 4px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+        .milestone-item.active .milestone-dot {
+            border-color: #3B82F6;
+            transform: scale(1.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 400px;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            background-color: #262626;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .solution-box:hover .tooltip {
+            display: block;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="sticky top-0 bg-white/80 backdrop-blur-lg z-10 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">Brainbook</h1>
+            <div class="hidden md:flex space-x-8">
+                <a class="nav-link active" data-target="vision">The Vision</a>
+                <a class="nav-link" data-target="solution">The Solution</a>
+                <a class="nav-link" data-target="investment">The Investment</a>
+                <a class="nav-link" data-target="roadmap">The Roadmap</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Section: The Vision -->
+        <section id="vision" class="py-16 text-center">
+            <h2 class="text-sm font-bold uppercase text-blue-600 tracking-widest">A New Category</h2>
+            <p class="mt-4 text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">We're Not Building a Social Network.<br>We're Building a <span class="text-blue-600">Growth Network</span>.</p>
+            <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">Today's social media is a chaotic firehose of content optimized for distraction, not development. Brainbook is a platform architected from the ground up to empower intentional growth—an ecosystem where creators are valued for their knowledge, and users are rewarded with meaningful progress.</p>
+        </section>
+
+        <!-- Section: The Problem -->
+        <section id="problem" class="py-16">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800">For Creators: Lost in the Noise</h3>
+                    <p class="mt-4 text-gray-600">Platforms like Instagram and X are crowded and ephemeral. Your best ideas get buried in a fast-moving feed, making it impossible to build a dedicated community around curated content. Monetization is often indirect and unreliable.</p>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800">For Users: Growth is an Afterthought</h3>
+                    <p class="mt-4 text-gray-600">LinkedIn is too formal, others are purely entertainment. There is no dedicated space to discover emerging thinkers, engage in deep discussions, and actively learn from people you admire in a structured, meaningful way.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Solution -->
+        <section id="solution" class="py-16 text-center">
+            <h2 class="text-sm font-bold uppercase text-blue-600 tracking-widest">The Solution</h2>
+            <p class="mt-4 text-4xl font-extrabold text-gray-900">The Canvas & The Channel Ecosystem</p>
+            <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">Brainbook solves this with a revolutionary two-tiered ecosystem. This dual structure allows users to **discover** talent freely and then **invest** in their own growth.</p>
+            <div class="mt-12 max-w-4xl mx-auto grid md:grid-cols-3 items-center gap-4 text-center">
+                <div class="solution-box card p-8 relative">
+                    <div class="tooltip">The public square of ideas. Discover new creators and engage in vibrant discussions.</div>
+                    <div class="text-6xl">🌍</div>
+                    <h3 class="mt-4 text-2xl font-bold">The Canvas</h3>
+                    <p class="mt-2 text-gray-600">Open forum for discovery and community building.</p>
+                </div>
+                <div class="text-5xl text-blue-500 font-thin">→</div>
+                <div class="solution-box card p-8 relative">
+                    <div class="tooltip">A premium, subscription space for a creator's most valuable content, courses, and community.</div>
+                    <div class="text-6xl">💎</div>
+                    <h3 class="mt-4 text-2xl font-bold">The Channel</h3>
+                    <p class="mt-2 text-gray-600">Direct-to-creator monetization and deep learning.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Investment -->
+        <section id="investment" class="py-16">
+            <div class="text-center">
+                <h2 class="text-sm font-bold uppercase text-blue-600 tracking-widest">The Investment</h2>
+                <p class="mt-4 text-4xl font-extrabold text-gray-900">A Lean & Strategic ₹1.5 Crore Seed Round</p>
+                <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">This isn't just capital for runway; it's strategic fuel to execute a precise 18-month plan. We have meticulously calculated this figure to be the leanest amount required for maximum impact.</p>
+            </div>
+            <div class="mt-12 grid lg:grid-cols-2 gap-12 items-center">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold text-gray-800">Use of Funds</h3>
+                    <div id="funds-details" class="mt-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold">Product & Engineering</span>
+                            <span class="font-bold text-blue-600 text-lg">60%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold">Growth & Community</span>
+                            <span class="font-bold text-green-600 text-lg">25%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 25%"></div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold">Infrastructure & Ops</span>
+                            <span class="font-bold text-yellow-500 text-lg">15%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="fundsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: The Roadmap -->
+        <section id="roadmap" class="py-16">
+            <div class="text-center">
+                 <h2 class="text-sm font-bold uppercase text-blue-600 tracking-widest">The 18-Month Roadmap</h2>
+                 <p class="mt-4 text-4xl font-extrabold text-gray-900">From MVP to Market Leader</p>
+                 <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">This investment propels us through three distinct phases to achieve our critical milestones, positioning Brainbook for a powerful Series A.</p>
+            </div>
+            <div class="mt-16 max-w-3xl mx-auto">
+                <div id="milestone-1" class="milestone-item active">
+                    <div class="milestone-dot"></div>
+                    <p class="font-semibold text-blue-600">Phase 1: Foundation (Months 1-6)</p>
+                    <h4 class="text-xl font-bold mt-1">Achieve Core Functionality</h4>
+                    <ul class="mt-2 list-disc list-inside text-gray-600">
+                        <li>Launch friend/follower system</li>
+                        <li>Acquire first 5,000 active users</li>
+                    </ul>
+                </div>
+                <div id="milestone-2" class="milestone-item">
+                    <div class="milestone-dot"></div>
+                    <p class="font-semibold text-blue-600">Phase 2: Growth (Months 7-12)</p>
+                    <h4 class="text-xl font-bold mt-1">Ignite Community & Engagement</h4>
+                     <ul class="mt-2 list-disc list-inside text-gray-600">
+                        <li>Launch real-time comments</li>
+                        <li>Scale to 40,000 active users</li>
+                    </ul>
+                </div>
+                <div id="milestone-3" class="milestone-item">
+                    <div class="milestone-dot"></div>
+                    <p class="font-semibold text-blue-600">Phase 3: Monetization (Months 13-18)</p>
+                    <h4 class="text-xl font-bold mt-1">Validate Business Model</h4>
+                    <ul class="mt-2 list-disc list-inside text-gray-600">
+                        <li>Launch image/video uploads</li>
+                        <li>Onboard first creators to "Channels" beta</li>
+                        <li>Reach 100,000 active users</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-gray-200">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p class="text-xl font-bold text-gray-800">Brainbook</p>
+            <p class="mt-2">The Future of Learning and Creation.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Navigation Logic ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.dataset.target === entry.target.id);
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => observer.observe(section));
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = e.target.dataset.target;
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80, // Adjust for sticky header
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // --- Chart.js Donut Chart Logic ---
+            const ctx = document.getElementById('fundsChart').getContext('2d');
+            const fundsData = {
+                labels: ['Product & Engineering', 'Growth & Community', 'Infrastructure & Ops'],
+                datasets: [{
+                    label: 'Use of Funds',
+                    data: [9000000, 3750000, 2250000],
+                    backgroundColor: [
+                        '#3B82F6', // Blue
+                        '#10B981', // Green
+                        '#F59E0B'  // Yellow
+                    ],
+                    borderColor: '#FDFBF8',
+                    borderWidth: 4,
+                    hoverOffset: 16
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: fundsData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Inter'
+                                },
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.chart.getDatasetMeta(0).total;
+                                    const percentage = ((value / total) * 100).toFixed(0);
+                                    const formattedValue = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value);
+                                    return ` ${label}: ${formattedValue} (${percentage}%)`;
+                                }
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: 'Inter'
+                            },
+                            padding: 12,
+                            cornerRadius: 8,
+                            backgroundColor: '#1a202c',
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+             // --- Roadmap Interaction ---
+            const milestones = document.querySelectorAll('.milestone-item');
+            const milestoneObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                       milestones.forEach(item => item.classList.remove('active'));
+                       entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.8 });
+
+            milestones.forEach(milestone => {
+                milestoneObserver.observe(milestone);
+            });
+        });
+    </script>
+</body>
+</html>

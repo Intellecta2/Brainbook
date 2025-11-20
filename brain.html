@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brainbook: The Pitch Experience</title>
+    <!-- Chosen Palette: Cosmic Black & Electric Blue -->
+    <!-- Application Structure Plan: A complete redesign into a single-page, scroll-driven narrative. This cinematic "scrollytelling" format is inspired by presentations from world-class tech companies like Apple. It guides the investor through a powerful, linear story from problem to vision, using scroll-triggered animations to reveal content dynamically. This creates a highly immersive, engaging, and premium experience that is far more impactful and memorable than a traditional tabbed dashboard or static slideshow. -->
+    <!-- Visualization & Content Choices: 
+        - Use of Funds -> Goal: Compare/Inform -> Viz: "The Investment Core" - An interactive diagram with a central funding orb and satellite nodes. -> Interaction: Clicking a satellite node provides detailed info. -> Justification: This is a unique, proprietary visualization that is more conceptually engaging than a standard chart, showing funds as "energy" for growth. -> Library/Method: HTML/CSS/JS.
+        - Revenue Model -> Goal: Organize/Explore -> Viz: "The Revenue Constellation" - A bento grid where each stream is a glowing star. -> Interaction: Hovering over a star reveals details with a subtle glow effect. -> Justification: The "constellation" metaphor aligns with the futuristic theme and presents the revenue streams as interconnected parts of a larger strategy. -> Library/Method: HTML/CSS/JS.
+        - Roadmap -> Goal: Change -> Viz: Scroll-based Animated Timeline -> Interaction: Milestones animate into view as the user scrolls down the page. -> Justification: This ties progress directly to the user's action of scrolling, creating a tangible sense of forward momentum. -> Library/Method: HTML/CSS/JS with Intersection Observer.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #e5e7eb; /* gray-200 */
+        }
+        #main-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(18, 18, 18, 1), rgba(0,0,0,1));
+            z-index: -1;
+        }
+        #aurora {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 1400px; height: 1400px;
+            margin-left: -700px; margin-top: -700px;
+            background-image: radial-gradient(ellipse at center, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0) 70%);
+            transition: transform 10s linear;
+            z-index: -1;
+        }
+        .glass-card {
+            background: rgba(10, 10, 25, 0.3);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(15, 15, 30, 0.4);
+        }
+        .section-content {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .section-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glow-text {
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+        }
+        .investment-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .investment-node.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div id="main-bg"></div>
+    <div id="aurora"></div>
+
+    <main class="relative z-10 container mx-auto px-6">
+
+        <!-- Section 1: The Hook -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center">
+            <div class="section-content visible">
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-br from-white to-slate-400 leading-tight">The Social Network is Obsolete.</h1>
+                <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-blue-400 mt-2 glow-text">Welcome to the Growth Network.</h2>
+                <p class="mt-8 text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">
+                    They were built to harvest your attention. We are architecting a world where your potential is compounded. This is Brainbook.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: The Problem -->
+        <section class="py-24 md:py-32">
+            <div class="section-content text-center max-w-4xl mx-auto">
+                <h3 class="text-base font-semibold text-blue-400 tracking-wider uppercase">The Core Problem</h3>
+                <h2 class="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-white">Engineered Distraction. Wasted Potential.</h2>
+                <p class="mt-6 text-lg text-slate-300">
+                    Modern platforms operate as attention-harvesting engines, meticulously designed to keep us in a state of passive consumption. The problem isn't just wasted time; it's the systemic erosion of our ability to focus and grow.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: The Solution -->
+        <section class="py-24 md:py-32">
+            <div class="section-content text-center max-w-4xl mx-auto">
+                <h3 class="text-base font-semibold text-blue-400 tracking-wider uppercase">The Solution</h3>
+                <h2 class="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-white">An Ecosystem for Growth.</h2>
+                <p class="mt-6 text-lg text-slate-300">
+                    Brainbook transforms passive scrolling into active discovery. We are building a "growth network" where every interaction is a tool to learn, focus, and build a more valuable version of yourself, powered by our **Unfiltered Human Feed**.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: Why Now? -->
+        <section class="py-24 md:py-32">
+             <div class="section-content text-center max-w-4xl mx-auto">
+                <h3 class="text-base font-semibold text-blue-400 tracking-wider uppercase">Why Now?</h3>
+                <h2 class="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-white">A Paradigm Shift.</h2>
+                <p class="mt-6 text-lg text-slate-300">
+                    A perfect storm has created a clear market vacuum for a platform built on value, not volume.
+                </p>
+                <div class="mt-12 grid md:grid-cols-3 gap-6 text-center">
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="font-bold text-xl text-white">Post-Attention Economy</h4>
+                        <p class="mt-2 text-slate-400 text-sm">A global demand for digital wellness and authentic connection is accelerating.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="font-bold text-xl text-white">Creator Economy 2.0</h4>
+                        <p class="mt-2 text-slate-400 text-sm">Creators need sovereign platforms for direct monetization, not just viral reach.</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl">
+                        <h4 class="font-bold text-xl text-white">Digital Sovereignty</h4>
+                        <p class="mt-2 text-slate-400 text-sm">Users demand control over their feeds, their data, and their own growth.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 5: The Business Case -->
+        <section class="py-24 md:py-32">
+            <div class="section-content">
+                <div class="text-center max-w-4xl mx-auto">
+                    <h3 class="text-base font-semibold text-blue-400 tracking-wider uppercase">The Business Case</h3>
+                    <h2 class="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-white">The Connection Economy</h2>
+                    <p class="mt-6 text-lg text-slate-300">
+                       Our revenue model is our philosophy. We succeed only when our creators and communities succeed. This is our strategic plan.
+                    </p>
+                </div>
+                 <div class="mt-20 grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h4 class="text-3xl font-bold text-white">The Revenue Constellation</h4>
+                        <p class="text-slate-400 mt-2">A multi-faceted strategy for sustainable, user-aligned monetization.</p>
+                        <div class="mt-8 grid grid-cols-2 gap-4">
+                            <div class="glass-card p-4 rounded-lg">
+                                <h5 class="font-bold text-white">Creator Subscriptions</h5>
+                                <p class="text-xs text-slate-400 mt-1">Our primary engine. Creators offer exclusive content; we take a transparent percentage.</p>
+                            </div>
+                            <div class="glass-card p-4 rounded-lg">
+                                <h5 class="font-bold text-white">Brainbook Pro</h5>
+                                <p class="text-xs text-slate-400 mt-1">A premium user subscription for an ad-free experience & advanced analytics.</p>
+                            </div>
+                            <div class="glass-card p-4 rounded-lg">
+                                <h5 class="font-bold text-white">Marketplace Fees</h5>
+                                <p class="text-xs text-slate-400 mt-1">A small transaction fee on sales within our peer-to-peer commerce ecosystem.</p>
+                            </div>
+                            <div class="glass-card p-4 rounded-lg">
+                                <h5 class="font-bold text-white">Promoted Discovery</h5>
+                                <p class="text-xs text-slate-400 mt-1">An ethical, non-intrusive way for businesses to gain visibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-3xl font-bold text-white text-center lg:text-left">The Investment Core</h4>
+                        <p class="text-slate-400 mt-2 text-center lg:text-left">We are raising a seed round of <span class="font-bold text-blue-400">₹1.5 Crores</span>. Click to see the allocation.</p>
+                        <div class="mt-8 flex justify-center items-center h-80 relative">
+                            <!-- Investment Core Visualization -->
+                            <div id="investment-core-center" class="w-32 h-32 rounded-full bg-blue-600 flex items-center justify-center text-center font-bold text-white shadow-2xl shadow-blue-500/50">Seed Fund<br>₹1.5Cr</div>
+                            <div id="node-product" class="investment-node absolute w-24 h-24 rounded-full glass-card flex items-center justify-center text-center text-xs font-semibold p-2" style="transform: translate(-120px, -100px);">Product & Engineering</div>
+                            <div id="node-growth" class="investment-node absolute w-24 h-24 rounded-full glass-card flex items-center justify-center text-center text-xs font-semibold p-2" style="transform: translate(120px, -60px);">Growth & Community</div>
+                            <div id="node-ops" class="investment-node absolute w-24 h-24 rounded-full glass-card flex items-center justify-center text-center text-xs font-semibold p-2" style="transform: translate(0px, 130px);">Infrastructure & Ops</div>
+                        </div>
+                        <p id="investment-details" class="text-center text-slate-400 h-12 mt-4"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: The Team -->
+        <section class="py-24 md:py-32">
+            <div class="section-content text-center max-w-4xl mx-auto">
+                <h3 class="text-base font-semibold text-blue-400 tracking-wider uppercase">The Team</h3>
+                <h2 class="mt-2 text-5xl md:text-6xl font-extrabold tracking-tight text-white">Vision Requires a Visionary.</h2>
+                 <div class="mt-12 inline-flex flex-col items-center">
+                     <div class="w-48 h-48 relative">
+                        <img src="./moimage.png" alt="Rohit Kumar" class="rounded-md w-full">
+                         <span class="text-5xl text-blue-300"></span>
+                     </div>
+                     <h4 class="mt-4 text-2xl font-bold text-white">Rohit Kumar</h4>
+                     <p class="text-blue-400">Founder & CEO, Softech</p>
+                     <p class="mt-4 text-slate-300 italic max-w-xl">
+                        "We are not just building another app. We are architecting a new digital paradigm where technology is judged not by its ability to distract, but by its power to develop. This is the life's work I founded Softech to achieve."
+                     </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    // --- Aurora Background Effect ---
+    const aurora = document.getElementById('aurora');
+    document.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const x = (clientX / window.innerWidth) * 100;
+        const y = (clientY / window.innerHeight) * 100;
+        aurora.style.transform = `translate(-${50 - x/2}%, -${50 - y/2}%)`;
+    });
+
+    // --- Scroll-triggered Animations ---
+    const sections = document.querySelectorAll('.section-content');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // --- Investment Core Interactive Diagram ---
+    const nodeProduct = document.getElementById('node-product');
+    const nodeGrowth = document.getElementById('node-growth');
+    const nodeOps = document.getElementById('node-ops');
+    const investmentDetails = document.getElementById('investment-details');
+    const nodes = [nodeProduct, nodeGrowth, nodeOps];
+
+    const details = [
+        '60%: To architect an unparalleled product, expanding our core engineering team to accelerate the roadmap.',
+        '25%: To ignite our community by strategically acquiring our first 100,000 engaged users.',
+        '15%: To build a flawlessly secure and scalable global infrastructure, ready for exponential growth.'
+    ];
+
+    nodes.forEach((node, index) => {
+        node.addEventListener('click', () => {
+            nodes.forEach(n => n.classList.remove('active', 'border-blue-500'));
+            node.classList.add('active', 'border-blue-500');
+            investmentDetails.textContent = details[index];
+            investmentDetails.style.opacity = 0;
+            setTimeout(() => { investmentDetails.style.opacity = 1; }, 100);
+        });
+    });
+});
+</script>
+</body>
+</html>
+

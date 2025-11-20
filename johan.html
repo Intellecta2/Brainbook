@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegCompass SME - Interactive Prototype</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .sidebar-icon { stroke-width: 1.5; }
+        .nav-link.active { background-color: #1e293b; color: white; }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .toast-notification {
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col p-4 flex-shrink-0">
+        <div class="flex items-center gap-3 mb-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-400"><path d="m12 19-7-7 7-7 7 7-7 7Z"/><path d="m19 12-7 7-7-7"/><path d="m5 12 7-7 7 7"/></svg>
+            <h1 class="text-xl font-bold text-white">RegCompass</h1>
+        </div>
+        <nav class="flex-grow">
+            <ul class="space-y-2">
+                <li><a href="#dashboard" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="layout-dashboard" class="sidebar-icon"></i>Dashboard</a></li>
+                <li><a href="#compliance" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="shield-check" class="sidebar-icon"></i>Compliance</a></li>
+                <li><a href="#surveillance" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="siren" class="sidebar-icon"></i>Surveillance</a></li>
+                <li><a href="#clients" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="users" class="sidebar-icon"></i>Clients</a></li>
+                <li><a href="#analytics" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="bar-chart-3" class="sidebar-icon"></i>Analytics</a></li>
+                <li><a href="#reporting" class="nav-link flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"><i data-lucide="file-text" class="sidebar-icon"></i>Reporting</a></li>
+            </ul>
+        </nav>
+        <div class="border-t border-slate-700 pt-4">
+             <a href="#profile" class="nav-link flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700">
+                <img src="https://placehold.co/40x40/64748b/ffffff?text=B" alt="User" class="rounded-full">
+                <div>
+                    <p class="font-semibold text-white">Broker Inc.</p>
+                    <p class="text-xs text-slate-400">View Profile</p>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto p-8">
+        <!-- All pages are defined here and toggled via JS -->
+        <div id="dashboard" class="page-content">
+            <!-- Dashboard content from previous version -->
+            <h2 class="text-3xl font-bold text-slate-800 mb-2">Dashboard Overview</h2>
+            <p class="text-slate-500 mb-8">Here's your brokerage's health at a glance.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-md flex flex-col items-center justify-center text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="navigateTo('#compliance')">
+                    <h3 class="font-semibold text-slate-600 mb-2">Compliance Health</h3>
+                    <div id="healthScore" class="text-5xl font-bold text-green-500">92</div>
+                    <p class="text-sm text-slate-500 mt-2">Excellent Standing</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="navigateTo('#analytics')">
+                    <h3 class="font-semibold text-slate-600 mb-2">Daily Turnover</h3>
+                    <p class="text-3xl font-bold text-slate-800">₹ 1.2 Cr</p>
+                    <p class="text-sm text-green-500 flex items-center mt-2"><i data-lucide="trending-up" class="w-4 h-4 mr-1"></i>+5.2% vs yesterday</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="navigateTo('#clients')">
+                    <h3 class="font-semibold text-slate-600 mb-2">Active Clients</h3>
+                    <p class="text-3xl font-bold text-slate-800">1,420</p>
+                    <p class="text-sm text-slate-500 mt-2">+12 new this week</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer" onclick="navigateTo('#surveillance')">
+                    <h3 class="font-semibold text-slate-600 mb-2">Pending Alerts</h3>
+                    <p class="text-3xl font-bold text-red-500">3</p>
+                    <p class="text-sm text-slate-500 mt-2">Needs immediate attention</p>
+                </div>
+            </div>
+            <!-- Rest of dashboard -->
+             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="font-semibold text-slate-800 mb-4">Real-time Surveillance Alerts</h3>
+                    <div id="dashboard-alerts" class="space-y-4"></div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="font-semibold text-slate-800 mb-4">Compliance Status</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-700">KYC/AML Checks</span><span class="text-sm font-medium text-slate-700">98%</span></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full" style="width: 98%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-700">Margin Reporting</span><span class="text-sm font-medium text-slate-700">100%</span></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div></div>
+                        </div>
+                        <div>
+                           <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-700">Contract Notes</span><span class="text-sm font-medium text-slate-700">95%</span></div>
+                           <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-blue-600 h-2.5 rounded-full" style="width: 95%"></div></div>
+                        </div>
+                         <div>
+                            <div class="flex justify-between mb-1"><span class="text-sm font-medium text-slate-700">UCC Upload</span><span class="text-sm font-medium text-slate-700">85%</span></div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-yellow-500 h-2.5 rounded-full" style="width: 85%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Other pages remain hidden until navigated to -->
+        <div id="compliance" class="page-content hidden"><!-- Compliance content --></div>
+        <div id="surveillance" class="page-content hidden"><!-- Surveillance content --></div>
+        <div id="clients" class="page-content hidden"><!-- Client Management content --></div>
+        <div id="analytics" class="page-content hidden"><!-- Analytics content --></div>
+        <div id="reporting" class="page-content hidden"><!-- Reporting content --></div>
+        <div id="profile" class="page-content hidden"><!-- Profile content --></div>
+
+    </main>
+    
+    <!-- Modals and Toasts will be appended here -->
+    <div id="modal-container"></div>
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-3"></div>
+
+<script>
+    // --- MOCK DATA ---
+    const mockSurveillanceAlerts = [
+        { id: 1, type: "High Volume Anomaly", client: "CL-5829", details: "Trade in INFY 500% above 30-day avg.", timestamp: "2025-09-06 14:30:15", severity: "High", status: "Pending" },
+        { id: 2, type: "Potential Circular Trading", client: "CL-1052", details: "Opposing trades in TATAMOTORS within 2 mins.", timestamp: "2025-09-06 11:15:05", severity: "High", status: "Pending" },
+        { id: 3, type: "Frequent Loss-Making Trades", client: "CL-8874", details: "Client booking small losses repeatedly in options.", timestamp: "2025-09-06 10:05:45", severity: "Medium", status: "Pending" },
+        { id: 4, type: "Trade in Banned Scrip", client: "CL-2311", details: "Attempted trade in scrip under ASM list.", timestamp: "2025-09-05 09:20:00", severity: "Low", status: "Closed" }
+    ];
+    const mockClients = [
+        { id: "CL-5829", name: "Rohan Sharma", risk: "High", kyc: "Verified", joinDate: "2023-01-15" },
+        { id: "CL-1052", name: "Priya Patel", risk: "High", kyc: "Verified", joinDate: "2022-11-20" },
+        { id: "CL-8874", name: "Ankit Desai", risk: "Medium", kyc: "Verified", joinDate: "2023-05-10" },
+        { id: "CL-2311", name: "Sneha Verma", risk: "Low", kyc: "Pending", joinDate: "2023-08-01" },
+        { id: "CL-7890", name: "Vikas Kumar", risk: "Low", kyc: "Verified", joinDate: "2021-03-22" },
+    ];
+
+    // --- APPLICATION STATE ---
+    let currentPage = '#dashboard';
+
+    // --- PAGE TEMPLATES ---
+    const pageTemplates = {
+        compliance: `
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">Compliance Checklist</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <table class="w-full text-left">
+                    <thead><tr class="border-b"><th class="p-4">Task</th><th class="p-4">Frequency</th><th class="p-4">Due Date</th><th class="p-4">Status</th><th class="p-4">Action</th></tr></thead>
+                    <tbody id="compliance-table"></tbody>
+                </table>
+            </div>`,
+        surveillance: `
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">AI Surveillance Center</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <table class="w-full text-left">
+                     <thead><tr class="border-b"><th class="p-4">Alert Type</th><th class="p-4">Client ID</th><th class="p-4">Details</th><th class="p-4">Timestamp</th><th class="p-4">Severity</th><th class="p-4">Status</th></tr></thead>
+                    <tbody id="surveillance-table"></tbody>
+                </table>
+            </div>`,
+        clients: `
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">Client Management</h2>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <table class="w-full text-left">
+                     <thead><tr class="border-b"><th class="p-4">Client ID</th><th class="p-4">Name</th><th class="p-4">Risk Profile</th><th class="p-4">KYC Status</th><th class="p-4">Joined On</th></tr></thead>
+                    <tbody id="clients-table"></tbody>
+                </table>
+            </div>`,
+        analytics: `
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">Business Analytics</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-semibold text-slate-800 mb-4">Monthly Brokerage Revenue (₹ Lakhs)</h3><canvas id="revenueChart"></canvas></div>
+                <div class="bg-white p-6 rounded-xl shadow-md"><h3 class="font-semibold text-slate-800 mb-4">Top Traded Securities</h3><canvas id="securitiesChart"></canvas></div>
+            </div>`,
+        reporting: `
+             <h2 class="text-3xl font-bold text-slate-800 mb-8">One-Click Reporting</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <div class="bg-white p-6 rounded-xl shadow-md text-center"><i data-lucide="file-check-2" class="w-12 h-12 text-blue-500 mx-auto mb-4"></i><h3 class="font-semibold text-slate-800 mb-2">Suspicious Transaction Report (STR)</h3><p class="text-sm text-slate-500 mb-4">Generate and file STRs for flagged activities.</p><button class="action-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 w-full">Generate Report</button></div>
+                 <div class="bg-white p-6 rounded-xl shadow-md text-center"><i data-lucide="users" class="w-12 h-12 text-green-500 mx-auto mb-4"></i><h3 class="font-semibold text-slate-800 mb-2">Client Holding Report</h3><p class="text-sm text-slate-500 mb-4">Consolidated report of all client holdings.</p><button class="action-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 w-full">Generate Report</button></div>
+                 <div class="bg-white p-6 rounded-xl shadow-md text-center"><i data-lucide="landmark" class="w-12 h-12 text-indigo-500 mx-auto mb-4"></i><h3 class="font-semibold text-slate-800 mb-2">Margin Trading Report</h3><p class="text-sm text-slate-500 mb-4">Daily report on margin utilization and shortfalls.</p><button class="action-btn bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 w-full">Generate Report</button></div>
+            </div>`,
+        profile: `
+            <h2 class="text-3xl font-bold text-slate-800 mb-8">Brokerage Profile</h2>
+            <div class="bg-white p-8 rounded-xl shadow-md max-w-2xl mx-auto">
+                <div class="flex items-center space-x-6 mb-8">
+                    <img src="https://placehold.co/80x80/1e293b/ffffff?text=B" class="rounded-full" />
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-800">Broker Inc.</h3>
+                        <p class="text-slate-500">SEBI Registration: INB123456789</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-600 mb-4">Settings</h4>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg"><p>Enable Email Notifications</p><button class="text-sm bg-green-500 text-white px-3 py-1 rounded-full">Enabled</button></div>
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-lg"><p>API Access</p><button class="text-sm bg-slate-200 text-slate-600 px-3 py-1 rounded-full">Disabled</button></div>
+                        <button class="w-full mt-4 bg-slate-800 text-white py-2 rounded-lg hover:bg-slate-700">Save Changes</button>
+                    </div>
+                </div>
+            </div>`
+    };
+
+    // --- NAVIGATION ---
+    const navigateTo = (hash) => {
+        window.location.hash = hash;
+    };
+
+    const handleNavigation = () => {
+        const hash = window.location.hash || '#dashboard';
+        // if (hash === currentPage) return; // Can cause issues on first load
+        currentPage = hash;
+        
+        document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        
+        const pageId = hash.substring(1);
+        const pageContainer = document.getElementById(pageId);
+        const navLink = document.querySelector(`a[href="${hash}"]`);
+
+        if (pageContainer) {
+            if (pageId !== 'dashboard') {
+                pageContainer.innerHTML = pageTemplates[pageId];
+            }
+            pageContainer.classList.remove('hidden');
+            if (navLink) navLink.classList.add('active');
+            
+            renderPageContent(pageId);
+        }
+    };
+    
+    // --- EVENT LISTENERS ---
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initial setup
+        if (!window.location.hash) {
+            window.location.hash = '#dashboard';
+        }
+        handleNavigation();
+    });
+    window.addEventListener('hashchange', handleNavigation);
+
+
+    // --- DYNAMIC CONTENT RENDERING ---
+    function renderPageContent(pageId) {
+        switch (pageId) {
+            case 'dashboard': renderDashboardAlerts(); break;
+            case 'compliance': renderComplianceTable(); break;
+            case 'surveillance': renderSurveillanceTable(); break;
+            case 'clients': renderClientsTable(); break;
+            case 'analytics': initAnalyticsCharts(); break;
+            case 'reporting': addReportingButtonListeners(); break;
+        }
+        lucide.createIcons();
+    }
+    
+    // --- TABLE & COMPONENT RENDER FUNCTIONS ---
+    function renderDashboardAlerts() {
+        const container = document.getElementById('dashboard-alerts');
+        if (!container) return;
+        container.innerHTML = '';
+        mockSurveillanceAlerts.filter(a => a.status === 'Pending').slice(0, 3).forEach(alert => {
+            const el = document.createElement('div');
+            el.className = 'flex items-start p-4 rounded-lg border-l-4 border-red-500 bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors';
+            el.onclick = () => showInvestigationModal(alert.id);
+            el.innerHTML = `<div class="flex-shrink-0"><i data-lucide="alert-triangle" class="text-red-500"></i></div><div class="ml-3 flex-grow"><p class="font-semibold text-slate-800">${alert.type}</p><p class="text-sm text-slate-600">${alert.details}</p></div>`;
+            container.appendChild(el);
+        });
+    }
+
+    function renderComplianceTable() {
+        const tbody = document.getElementById('compliance-table');
+        if(!tbody) return;
+        const mockComplianceTasks = [
+            { task: "Daily Margin Reporting", freq: "Daily", due: "Today, EOD", status: "Completed" },
+            { task: "UCC Details Upload", freq: "Daily", due: "Today, EOD", status: "Pending" },
+            { task: "Monthly Client Holding", freq: "Monthly", due: "2025-09-10", status: "On Track" },
+        ];
+        tbody.innerHTML = '';
+        mockComplianceTasks.forEach(item => {
+            const statusClasses = { Completed: 'bg-green-100 text-green-800', Pending: 'bg-yellow-100 text-yellow-800', 'On Track': 'bg-blue-100 text-blue-800' };
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-slate-50';
+            row.innerHTML = `<td class="p-4 font-medium">${item.task}</td><td class="p-4">${item.freq}</td><td class="p-4">${item.due}</td><td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${statusClasses[item.status]}">${item.status}</span></td><td class="p-4"><button class="text-blue-600 hover:underline text-sm">View Details</button></td>`;
+            tbody.appendChild(row);
+        });
+    }
+
+    function renderSurveillanceTable() { 
+        const tbody = document.getElementById('surveillance-table');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+        mockSurveillanceAlerts.forEach(alert => {
+            const severityClasses = { High: 'bg-red-100 text-red-800', Medium: 'bg-yellow-100 text-yellow-800', Low: 'bg-blue-100 text-blue-800' };
+            const statusClasses = { Pending: 'text-red-600', Closed: 'text-green-600' };
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-slate-50 cursor-pointer';
+            row.onclick = () => showInvestigationModal(alert.id);
+            row.innerHTML = `<td class="p-4 font-medium">${alert.type}</td><td class="p-4">${alert.client}</td><td class="p-4">${alert.details}</td><td class="p-4">${alert.timestamp}</td><td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${severityClasses[alert.severity]}">${alert.severity}</span></td><td class="p-4 font-medium ${statusClasses[alert.status]}">${alert.status}</td>`;
+            tbody.appendChild(row);
+        });
+    }
+
+    function renderClientsTable() {
+        const tbody = document.getElementById('clients-table');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        mockClients.forEach(client => {
+            const riskClasses = { High: 'bg-red-100 text-red-800', Medium: 'bg-yellow-100 text-yellow-800', Low: 'bg-green-100 text-green-800' };
+             const kycClasses = { Verified: 'text-green-600', Pending: 'text-yellow-600' };
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-slate-50';
+            row.innerHTML = `<td class="p-4 font-medium">${client.id}</td><td class="p-4">${client.name}</td><td class="p-4"><span class="px-2 py-1 text-xs font-semibold rounded-full ${riskClasses[client.risk]}">${client.risk}</span></td><td class="p-4 font-medium ${kycClasses[client.kyc]}">${client.kyc}</td><td class="p-4">${client.joinDate}</td>`;
+            tbody.appendChild(row);
+        });
+    }
+
+    // --- INTERACTIVITY & MODALS ---
+    function showInvestigationModal(alertId) {
+        closeAllModals();
+        const alert = mockSurveillanceAlerts.find(a => a.id === alertId);
+        if (!alert) return;
+        const modalContainer = document.getElementById('modal-container');
+        const modal = document.createElement('div');
+        modal.id = `modal-${alertId}`;
+        modal.innerHTML = `
+            <div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-40 opacity-0">
+                <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl transform scale-95">
+                    <div class="p-6 border-b flex justify-between items-center">
+                        <h3 class="text-xl font-bold text-slate-800">Investigate Alert #${alertId}</h3>
+                        <button onclick="closeAllModals()" class="p-2 -mr-2 -mt-2 rounded-full hover:bg-slate-100"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div><p class="font-semibold text-slate-500">Client ID</p><p>${alert.client}</p></div>
+                            <div><p class="font-semibold text-slate-500">Timestamp</p><p>${alert.timestamp}</p></div>
+                            <div><p class="font-semibold text-slate-500">Severity</p><p>${alert.severity}</p></div>
+                            <div><p class="font-semibold text-slate-500">Status</p><p>${alert.status}</p></div>
+                        </div>
+                         <div class="pt-4"><p class="font-semibold text-slate-500 text-sm">Details</p><p>${alert.details}</p></div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-b-xl flex justify-end space-x-3">
+                         <button onclick="closeAllModals()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-300">Close</button>
+                         <button class="action-btn bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 flex items-center gap-2"><i data-lucide="shield-alert"></i>Escalate</button>
+                    </div>
+                </div>
+            </div>`;
+        modalContainer.appendChild(modal);
+        lucide.createIcons();
+        addReportingButtonListeners(); // for modal buttons
+        
+        setTimeout(() => {
+            modal.querySelector('.modal-backdrop').classList.remove('opacity-0');
+            modal.querySelector('.modal-content').classList.remove('scale-95');
+        }, 10);
+    }
+    
+    function closeAllModals() {
+        const modalContainer = document.getElementById('modal-container');
+        const modalBackdrop = modalContainer.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.classList.add('opacity-0');
+            modalBackdrop.querySelector('.modal-content').classList.add('scale-95');
+            setTimeout(() => { modalContainer.innerHTML = ''; }, 300);
+        }
+    }
+    
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+        toast.className = `toast-notification ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transform translate-x-full opacity-0`;
+        toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i><p>${message}</p>`;
+        container.appendChild(toast);
+        lucide.createIcons();
+        
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full', 'opacity-0');
+        }, 100);
+
+        setTimeout(() => {
+            toast.classList.add('translate-x-full', 'opacity-0');
+            setTimeout(() => toast.remove(), 500);
+        }, 4000);
+    }
+    
+    function addReportingButtonListeners() {
+        document.querySelectorAll('.action-btn').forEach(button => {
+            // Prevent adding multiple listeners
+            if (button.dataset.listener) return;
+            button.dataset.listener = true;
+
+            button.addEventListener('click', (e) => {
+                const targetButton = e.currentTarget;
+                const originalContent = targetButton.innerHTML;
+                targetButton.innerHTML = `<span class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>`;
+                targetButton.disabled = true;
+                setTimeout(() => {
+                    targetButton.innerHTML = originalContent;
+                    targetButton.disabled = false;
+                    closeAllModals();
+                    showToast('Action completed successfully!');
+                }, 1500);
+            });
+        });
+    }
+
+    let revenueChartInstance, securitiesChartInstance;
+    function initAnalyticsCharts() {
+        if (revenueChartInstance) revenueChartInstance.destroy();
+        if (securitiesChartInstance) securitiesChartInstance.destroy();
+        
+        const revenueCtx = document.getElementById('revenueChart');
+        const securitiesCtx = document.getElementById('securitiesChart');
+        if (!revenueCtx || !securitiesCtx) return;
+
+        revenueChartInstance = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12.5, 19.2, 15.3, 18.1, 22.4, 25.8],
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        securitiesChartInstance = new Chart(securitiesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Reliance', 'TCS', 'HDFC Bank', 'Infosys', 'Other'],
+                datasets: [{
+                    label: 'Trade Volume',
+                    data: [300, 250, 200, 150, 100],
+                    backgroundColor: ['#1d4ed8', '#1e40af', '#1e3a8a', '#2563eb', '#60a5fa'],
+                    hoverOffset: 4
+                }]
+            },
+            options: { responsive: true }
+        });
+    }
+</script>
+
+</body>
+</html>
+
